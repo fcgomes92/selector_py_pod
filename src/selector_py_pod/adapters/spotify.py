@@ -13,18 +13,21 @@ class SpotifyAdapter:
         self.client = Spotify(auth_manager=SpotifyClientCredentials(client_id=config.get("SPOTIFY_CLIENT_ID"),
                                                                     client_secret=config.get("SPOTIFY_CLIENT_SECRET")))
 
-    def get_episodes(self, show_id, **args) -> list[Episode]:
-        step = 50
-        r = self.client.show_episodes(
-            show_id, market=self.market, limit=step, **args)
+    def get_episodes(self, show_id) -> list[Episode]:
+        stp = 50
+        get_eps = self.client.show_episodes
+
+        r = get_eps(show_id, market=self.market, limit=stp)
         items = r.get('items', [])
         episodes = list(map(map_episodes, items))
+
         total = r.get('total')
-        offsets = total // step
+        offsets = total // stp
+
         for idx in range(1, offsets + 1):
-            offset = idx * step
-            rx = self.client.show_episodes(
-                show_id, market=self.market, limit=step, offset=offset, **args)
+            offset = idx * stp
+            rx = get_eps(show_id, market=self.market, limit=stp, offset=offset)
             extra_episodes = list(map(map_episodes, rx.get('items', [])))
             episodes.extend(extra_episodes)
+
         return episodes
