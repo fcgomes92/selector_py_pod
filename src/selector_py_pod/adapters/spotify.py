@@ -1,5 +1,5 @@
-import spotipy
 from selector_py_pod.models.episode import Episode
+from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
 
@@ -9,10 +9,9 @@ def map_episodes(episode) -> Episode:
 
 class SpotifyAdapter:
     def __init__(self, config) -> None:
-        super().__init__()
         self.market = config.get("SPOTIFY_MARKET")
-        self.client = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.get("SPOTIFY_CLIENT_ID"),
-                                                                            client_secret=config.get("SPOTIFY_CLIENT_SECRET")))
+        self.client = Spotify(auth_manager=SpotifyClientCredentials(client_id=config.get("SPOTIFY_CLIENT_ID"),
+                                                                    client_secret=config.get("SPOTIFY_CLIENT_SECRET")))
 
     def get_episodes(self, show_id, **args) -> list[Episode]:
         step = 50

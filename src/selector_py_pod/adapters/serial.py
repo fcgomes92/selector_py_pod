@@ -1,6 +1,7 @@
 from json import dumps
-from selector_py_pod.models.selection import Selection
 from pprint import PrettyPrinter
+
+from selector_py_pod.models.selection import Selection
 
 
 class SerialAdapter:
@@ -13,3 +14,4 @@ class SerialAdapter:
         text = dumps(s) if self.json else s
         printer = PrettyPrinter().pprint if self.pretty else print
         printer(text)
+        return True, text

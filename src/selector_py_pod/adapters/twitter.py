@@ -1,8 +1,8 @@
 import requests
-import twitter
 from selector_py_pod.models.episode import Episode
 from selector_py_pod.models.selection import Selection
 
+import twitter
 
 TEMPLATE = """{name}
 
@@ -47,3 +47,4 @@ class TwitterAdapter:
         print(len(tweet))
         status = self.client.PostUpdate(tweet)
         print(status)
+        return status, tweet
