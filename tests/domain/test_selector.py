@@ -26,8 +26,14 @@ class TestBuildSelection:
         episode = Episode('1', '1', 'https://foo.bar', 'https://foo.bar')
         adapter.get_episodes.return_value = [episode]
         selection = build_selection('test', 'test', 'test_id', adapter, k=1)
-        assert selection.name == 'test'
-        assert selection.description == 'test'
+        assert selection.serialize() == {'name': 'test', 'description': 'test', 'episodes': [episode.serialize()]}
         assert len(selection.episodes) == 1
         for e in selection.episodes:
             assert e.serialize() == episode.serialize()
+
+    def test_select_0_from_adapter(self, adapter: Mock):
+        adapter.get_episodes.return_value = []
+        selection = build_selection('test', 'test', 'test_id', adapter, k=1)
+        assert selection.name == 'test'
+        assert selection.description == 'test'
+        assert len(selection.episodes) == 0
